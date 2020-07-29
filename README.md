@@ -38,4 +38,4 @@ npm start
 
 Our project is under the supervision of University of Toronto Entrepreneurship Hatchery Program.
 
-<img width="1021" alt="Screen Shot 2020-07-22 at 12 47 28 AM" src="https://user-images.githubusercontent.com/33429115/88078222-28ab7380-cbb7-11ea-9464-e0f1c0232603.png">
+<img width="994" alt="Screen Shot 2020-07-29 at 2 33 27 AM" src="https://user-images.githubusercontent.com/33429115/88700762-15af1b00-d144-11ea-9278-2244c0dc2764.png">
