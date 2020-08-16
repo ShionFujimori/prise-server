@@ -13,6 +13,10 @@ const pool = mysql.createPool({
     database: 'prise'
 });
 
+// required to obtain the value of a form
+app.use(express.urlencoded({extended: true}));
+app.use(express.json());
+
 // CORS (Cross-origin resource sharing)
 // A protocol that enables scripts running on a browser client
 // to interact with resources from a different origin
@@ -36,6 +40,21 @@ app.get('/posts', (req, res) => {
             'SELECT * FROM user',
             (error, results) => {
                 res.send(results);
+                connection.release();
+            }
+        );
+    });
+});
+
+// '/create-trial' routing
+app.post('/create-trial', (req, res) => {
+    pool.getConnection((err, connection) => {
+        if (err) throw err;
+        connection.query(
+            'INSERT INTO email_list (email) VALUES (?)',
+            [req.body.email],
+            (error, results) => {
+                res.redirect("http://localhost:3000/");
                 connection.release();
             }
         );
