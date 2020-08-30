@@ -111,6 +111,38 @@ app.post('/update-user/:id', (req, res) => {
     });
 });
 
+// '/delete-user/:id' routing
+// CRUD: DELETE operation (user account)
+app.post('/delete-user/:id', (req, res) => {
+    pool.getConnection((err, connection) => {
+        if (err) throw err;
+        connection.query(
+            'DELETE FROM user WHERE id = ?',
+            [req.params.id],
+            (error, results) => {
+                res.redirect("http://localhost:3000/");
+                connection.release();
+            }
+        );
+    });
+});
+
+// '/delete-trial/:id' routing
+// CRUD: DELETE operation (trial email info)
+app.post('/delete-trial/:id', (req, res) => {
+    pool.getConnection((err, connection) => {
+        if (err) throw err;
+        connection.query(
+            'DELETE FROM email_list WHERE id = ?',
+            [req.params.id],
+            (error, results) => {
+                res.redirect("http://localhost:3000/");
+                connection.release();
+            }
+        );
+    });
+});
+
 // Run a local web server (localhost:4000)
 const port = process.env.PORT || 4000;
 app.listen(port, () => console.log(`Listening on port ${port}...`));
