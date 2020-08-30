@@ -33,6 +33,7 @@ app.get('/', (req, res) => {
 });
 
 // '/posts' routing
+// CRUD: READ operation (all user data)
 app.get('/posts', (req, res) => {
     pool.getConnection((err, connection) => {
         if (err) throw err;
@@ -47,12 +48,29 @@ app.get('/posts', (req, res) => {
 });
 
 // '/create-trial' routing
+// CRUD: CREATE operation (trial email)
 app.post('/create-trial', (req, res) => {
     pool.getConnection((err, connection) => {
         if (err) throw err;
         connection.query(
             'INSERT INTO email_list (email) VALUES (?)',
             [req.body.email],
+            (error, results) => {
+                res.redirect("http://localhost:3000/");
+                connection.release();
+            }
+        );
+    });
+});
+
+// '/create-user' routing
+// CRUD: CREATE operation (new user)
+app.post('/create-user', (req, res) => {
+    pool.getConnection((err, connection) => {
+        if (err) throw err;
+        connection.query(
+            'INSERT INTO user (username, password) VALUES (?, ?)',
+            [req.body.username, req.body.password],
             (error, results) => {
                 res.redirect("http://localhost:3000/");
                 connection.release();
