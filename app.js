@@ -79,6 +79,22 @@ app.post('/create-user', (req, res) => {
     });
 });
 
+// '/update-user' routing
+// CRUD: UPDATE operation (user password)
+app.post('/update-user/:id', (req, res) => {
+    pool.getConnection((err, connection) => {
+        if (err) throw err;
+        connection.query(
+            'UPDATE user SET password = ? WHERE id = ?',
+            [req.body.password, req.params.id],
+            (error, results) => {
+                res.redirect("http://localhost:3000/");
+                connection.release();
+            }
+        );
+    });
+});
+
 // Run a local web server (localhost:4000)
 const port = process.env.PORT || 4000;
 app.listen(port, () => console.log(`Listening on port ${port}...`));
