@@ -32,21 +32,6 @@ app.get('/', (req, res) => {
     res.render('top.ejs');
 });
 
-// '/posts' routing
-// CRUD: READ operation (all user data)
-app.get('/posts', (req, res) => {
-    pool.getConnection((err, connection) => {
-        if (err) throw err;
-        connection.query(
-            'SELECT * FROM user',
-            (error, results) => {
-                res.send(results);
-                connection.release();
-            }
-        );
-    });
-});
-
 // '/create-trial' routing
 // CRUD: CREATE operation (trial email)
 app.post('/create-trial', (req, res) => {
@@ -79,7 +64,38 @@ app.post('/create-user', (req, res) => {
     });
 });
 
-// '/update-user' routing
+// '/read-user' routing
+// CRUD: READ operation (all user data)
+app.get('/read-user', (req, res) => {
+    pool.getConnection((err, connection) => {
+        if (err) throw err;
+        connection.query(
+            'SELECT * FROM user',
+            (error, results) => {
+                res.send(results);
+                connection.release();
+            }
+        );
+    });
+});
+
+// '/read-user/:id' routing
+// CRUD: READ operation (a single user data)
+app.get('/read-user/:id', (req, res) => {
+    pool.getConnection((err, connection) => {
+        if (err) throw err;
+        connection.query(
+            'SELECT * FROM user WHERE id = ?',
+            [req.params.id],
+            (error, results) => {
+                res.send(results);
+                connection.release();
+            }
+        );
+    });
+});
+
+// '/update-user/:id' routing
 // CRUD: UPDATE operation (user password)
 app.post('/update-user/:id', (req, res) => {
     pool.getConnection((err, connection) => {
