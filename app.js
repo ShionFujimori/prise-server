@@ -32,8 +32,41 @@ app.get('/', (req, res) => {
     res.render('top.ejs');
 });
 
-// '/posts' routing
-app.get('/posts', (req, res) => {
+// '/create-trial' routing
+// CRUD: CREATE operation (trial email)
+app.post('/create-trial', (req, res) => {
+    pool.getConnection((err, connection) => {
+        if (err) throw err;
+        connection.query(
+            'INSERT INTO email_list (email) VALUES (?)',
+            [req.body.email],
+            (error, results) => {
+                res.redirect("http://localhost:3000/");
+                connection.release();
+            }
+        );
+    });
+});
+
+// '/create-user' routing
+// CRUD: CREATE operation (new user)
+app.post('/create-user', (req, res) => {
+    pool.getConnection((err, connection) => {
+        if (err) throw err;
+        connection.query(
+            'INSERT INTO user (username, password) VALUES (?, ?)',
+            [req.body.username, req.body.password],
+            (error, results) => {
+                res.redirect("http://localhost:3000/");
+                connection.release();
+            }
+        );
+    });
+});
+
+// '/read-user' routing
+// CRUD: READ operation (all user data)
+app.get('/read-user', (req, res) => {
     pool.getConnection((err, connection) => {
         if (err) throw err;
         connection.query(
@@ -46,13 +79,62 @@ app.get('/posts', (req, res) => {
     });
 });
 
-// '/create-trial' routing
-app.post('/create-trial', (req, res) => {
+// '/read-user/:id' routing
+// CRUD: READ operation (a single user data)
+app.get('/read-user/:id', (req, res) => {
     pool.getConnection((err, connection) => {
         if (err) throw err;
         connection.query(
-            'INSERT INTO email_list (email) VALUES (?)',
-            [req.body.email],
+            'SELECT * FROM user WHERE id = ?',
+            [req.params.id],
+            (error, results) => {
+                res.send(results);
+                connection.release();
+            }
+        );
+    });
+});
+
+// '/update-user/:id' routing
+// CRUD: UPDATE operation (user password)
+app.post('/update-user/:id', (req, res) => {
+    pool.getConnection((err, connection) => {
+        if (err) throw err;
+        connection.query(
+            'UPDATE user SET password = ? WHERE id = ?',
+            [req.body.password, req.params.id],
+            (error, results) => {
+                res.redirect("http://localhost:3000/");
+                connection.release();
+            }
+        );
+    });
+});
+
+// '/delete-user/:id' routing
+// CRUD: DELETE operation (user account)
+app.post('/delete-user/:id', (req, res) => {
+    pool.getConnection((err, connection) => {
+        if (err) throw err;
+        connection.query(
+            'DELETE FROM user WHERE id = ?',
+            [req.params.id],
+            (error, results) => {
+                res.redirect("http://localhost:3000/");
+                connection.release();
+            }
+        );
+    });
+});
+
+// '/delete-trial/:id' routing
+// CRUD: DELETE operation (trial email info)
+app.post('/delete-trial/:id', (req, res) => {
+    pool.getConnection((err, connection) => {
+        if (err) throw err;
+        connection.query(
+            'DELETE FROM email_list WHERE id = ?',
+            [req.params.id],
             (error, results) => {
                 res.redirect("http://localhost:3000/");
                 connection.release();
